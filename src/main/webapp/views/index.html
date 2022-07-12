@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Главная</title>
+    <link rel="stylesheet" href="views/css/main.css">
+    <link rel="icon" href="views/img/logo.jpg">
+</head>
+    <body>
+    <h1>Заголовок 1ого уровня</h1>
+    <!--
+    <form method="post">
+        <input type="text" name="text" placeholder="введи">
+        <input type="text" name="tag" placeholder="введи">
+        <button type="submit">добавить</button>
+    </form>
+    -->
+
+
+    <table>Перечень заявок</table>
+    <p>"${helpRequests}"</p>
+    <!--<div>
+        <table>
+
+            <tr>
+                <th>Id</th>
+                <th>Текст запроса</th>
+                <th>Заявитель</th>
+                <th>Номер комнаты</th>
+            </tr>
+
+            <tr th:each="request : ${helpRequests}">
+                <td th:text="${helpRequests.id}">13/01/2011</td>
+            </tr>
+
+        </table>
+    </div>
+    -->
+    </body>
+<footer>CSS не подключено</footer>
+</html>
+
+<!-- <body>
+<h1>Заголовок 1ого уровня</h1>
+<table>Перечень заявок</table>
+<div class="seedstarterlist" th:unless="${#lists.isEmpty(allSeedStarters)}">
+
+    <h2 th:text="#{title.list}">List of Seed Starters</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th th:text="#{seedstarter.datePlanted}">Date Planted</th>
+            <th th:text="#{seedstarter.covered}">Covered</th>
+            <th th:text="#{seedstarter.type}">Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sb : ${allSeedStarters}">
+            <td th:text="${{sb.datePlanted}}">13/01/2011</td>
+            <td th:text="#{|bool.${sb.covered}|}">yes</td>
+            <td th:text="#{|seedstarter.type.${sb.type}|}">Wireframe</td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body> -->
