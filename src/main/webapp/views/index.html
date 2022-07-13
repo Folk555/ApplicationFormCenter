@@ -31,11 +31,13 @@
 <div>
     <table>
         <tr>
+            <th>Id</th>
             <th>Текст запроса</th>
             <th>Заявитель</th>
             <th>Номер комнаты</th>
         </tr>
-        <tr th:each="request : ${HelpRequest}">
+        <tr th:each="request : ${helpRequests}">
+            <td th:text="${request.getId()}"></td>
             <td th:text="${request.getMessageText()}"></td>
             <td th:text="${request.getRequestOwner()}"></td>
             <td th:text="${request.getRoomNumber()}"></td>
