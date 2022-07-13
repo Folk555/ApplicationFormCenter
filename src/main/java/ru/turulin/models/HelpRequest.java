@@ -3,6 +3,7 @@ package ru.turulin.models;
 //import javax.persistence.*;
 
 //@Entity
+
 public class HelpRequest {
     //@Id
     //@GeneratedValue(strategy= GenerationType.AUTO)
@@ -41,5 +42,11 @@ public class HelpRequest {
     }
 
     public HelpRequest() {
+    }
+
+    public HelpRequest(String messageText, String requestOwner, String roomNumber) {
+        this.messageText = messageText;
+        this.requestOwner = requestOwner;
+        this.roomNumber = roomNumber;
     }
 }
