@@ -8,7 +8,7 @@ import ru.turulin.models.HelpRequest;
 import ru.turulin.repos.HelpRequestRepository;
 
 @Controller
-@RequestMapping(path = "/HelpRequest") //Все url в мапингах будут начинаться с url в @RequestMapping.
+@RequestMapping(path = "/helpRequest") //Все url в мапингах будут начинаться с url в @RequestMapping.
 public class HelpRequestController {
     @Autowired // бин UserRepository будет автоматически внедрен в переменную userRepository
     private HelpRequestRepository helpRequestRepository;

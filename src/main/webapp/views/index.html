@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Главная</title>
     <link rel="stylesheet" href="views/css/main.css">
-    <link rel="icon" href="views/img/logo.jpg">
+    <link rel="icon" href="img/logo.jpg">
 </head>
 <body>
 <h1>Заголовок 1ого уровня</h1>
@@ -44,7 +44,12 @@
         </tr>
     </table>
 </div>
-
+<div>
+    <p th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</p>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
 </body>
 <footer>CSS не подключено</footer>
 </html>

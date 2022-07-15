@@ -26,7 +26,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * Настраеваем путь к представлениям
-     *
      */
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
@@ -47,12 +46,20 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * Внедряем в spring шаблонизатор Thymeleaf
-     *
      */
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
+    }
+    /**
+     * Для страниц, которые никак не обрабатываются сервером(контроллером), а просто возвращают страницу, маппинг можно настроить в конфигурации.
+     * Страница обрабатывается Spring Security контроллером по умолчанию, поэтому для неё отдельный контроллер не требуется.
+     */
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("").setViewName("login");
+        registry.addViewController("/logout").setViewName("login");
     }
 }

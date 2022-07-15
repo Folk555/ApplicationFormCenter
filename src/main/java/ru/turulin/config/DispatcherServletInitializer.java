@@ -14,7 +14,6 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
 
     /**
      * Задаем сервлету spring конфигурацию
-     * @return
      */
     @Override
     protected Class<?>[] getServletConfigClasses() {
@@ -23,7 +22,6 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
 
     /**
      * Задаем путь по которому будет соответствовать DispatcherServlet
-     * @return
      */
     @Override
     protected String[] getServletMappings() {
