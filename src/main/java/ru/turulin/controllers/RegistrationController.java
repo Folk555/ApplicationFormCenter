@@ -6,16 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.turulin.models.Account;
 import ru.turulin.models.Role;
-import ru.turulin.models.User;
-import ru.turulin.repos.UserRepo;
+import ru.turulin.repos.AccountRepo;
 
 import java.util.Collections;
 
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserRepo userRepo;
+    private AccountRepo accountRepo;
     @Autowired
     PasswordEncoder passwordEncoder;
     @GetMapping("/registration")
@@ -23,17 +23,16 @@ public class RegistrationController {
         return "registration";
     }
     @PostMapping("/registration")
-    public String addUser(User user, Model model) {
-        User userFromDB = userRepo.findByUsername(user.getUsername());
-        if (userFromDB != null) {
+    public String addAccount(Account account, Model model) {
+        Account accountFromDB = accountRepo.findByUsername(account.getUsername());
+        if (accountFromDB != null) {
             model.addAttribute("message","User exist");
             return "registration";
         }
-
-        user.setEnabled(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepo.save(user);
+        account.setEnabled(true);
+        account.setRoles(Collections.singleton(Role.USER));
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        accountRepo.save(account);
         return "redirect:/login";
     }
 }

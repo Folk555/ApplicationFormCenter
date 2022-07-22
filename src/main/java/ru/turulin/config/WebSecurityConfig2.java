@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +16,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.ui.Model;
+import ru.turulin.models.Account;
 
 import javax.sql.DataSource;
 
@@ -79,35 +81,40 @@ public class WebSecurityConfig2 {
         return new InMemoryUserDetailsManager(user);
     }
 
+    /**
+     * Создаем сервис авторизазии юзеров.
+     * Плюс юзера "Admin" с ролью администратора по умолчанию, если его нет в БД.
+     * @return
+     */
     @Bean
-    public UserDetailsManager users() {
+    public UserDetailsService UserDetailsService() {
 
-        UserDetails user = User.builder()
-                .username("user")
-                .password("p123")
-                .roles("USER")
-                .build();
+        JdbcUserDetailsManager usersManager = new JdbcUserDetailsManager(dataSource);
+        usersManager.setUsersByUsernameQuery("select username, password, enabled from accounts where username=?");
+        usersManager.setAuthoritiesByUsernameQuery("select acc.username, ar.roles from accounts acc " +
+                "inner join account_roles ar on acc.id = ar.account_id where acc.username=?");
 
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
 
-        users.setCreateUserSql("INSERT INTO usrs (id, username, password, enabled) " +
-                "VALUES (nextval('usrs_id_seq'), ?, ?, ?);");
-        users.setCreateAuthoritySql("UPDATE usrs SET role = ?" +
-                "WHERE username = ?");
-        users.createUser(user);
-        users.setUsersByUsernameQuery("select username, password, enabled from usrs where username=?");
-        users.setAuthoritiesByUsernameQuery("select u.username, ur.roles from usrs u inner join user_role ur on u.id = ur.usr_id where u.username=?");
-        //JdbcUserDetailsManagerConfigurer us = new JdbcUserDetailsManagerConfigurer();
+        usersManager.setCreateUserSql("INSERT INTO accounts (id, username, password, enabled) " +
+                "VALUES (nextval('account_id_seq'), ?, ?, ?);");
+        usersManager.setCreateAuthoritySql("insert into account_roles (account_id, roles)" +
+                "SELECT id, ? FROM accounts WHERE username = ?");
+        usersManager.setUserExistsSql("select username from accounts where username = ?");
 
-        /*UserDetailsManager users = (JdbcUserDetailsManager) us.dataSource(dataSource)
-                .usersByUsernameQuery("select username, password, active from usrs where username=?")
-                .authoritiesByUsernameQuery("select u.username, ur.roles from usrs u inner join user_role ur on u.id = ur.usr_id where u.username=?")
-                //.passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder())
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .getUserDetailsService();
-         */
+        //Не работает как надо!!!
+        //Если дефолтнгого юзера в БД нет, то создаем.
+        if (!usersManager.userExists("Admin")) {
+            UserDetails user = User.builder()
+                    .username("Admin")
+                    .password(passwordEncoder.encode("admin"))
+                    .roles("ADMIN")
+                    .build();
+            usersManager.createUser(user);
 
-        return users;
+        }
+
+
+        return usersManager;
     }
 
     /**
@@ -127,7 +134,7 @@ public class WebSecurityConfig2 {
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(users());
+        authProvider.setUserDetailsService(UserDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder); //Все ради этой строчки
         return authProvider;
     }
