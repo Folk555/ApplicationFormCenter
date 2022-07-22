@@ -3,7 +3,8 @@ package ru.turulin.config;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
- * Java конфикурация сервлета
+ * Java конфикурация сервлета.
+ * здесь аннотация @Configuration не нужна.
  */
 
 public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {

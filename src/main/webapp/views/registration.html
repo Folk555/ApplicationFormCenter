@@ -16,7 +16,7 @@
     <div><input type="submit" value="Зарегистрироваться"/></div>
 </form>
 <div th:if="${message}">
-    "${message}"
+    <p th:text="${message}"></p>
     <p>Юзер есть</p>
 </div>
 </body>

@@ -8,7 +8,11 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "usrs_gen",
+            sequenceName = "usrs_id_seq",
+            allocationSize=1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usrs_gen")
     private long id;
     @Column(name = "first_name")
     private String firstName;
@@ -18,7 +22,8 @@ public class User {
     private String lastName;
     private String username;
     private String password;
-    private boolean active;
+    private String role;
+    private boolean enabled;
     //Аналог @OneToMany. Предпочтителен для перечеслений.
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name="user_role",
@@ -62,12 +67,12 @@ public class User {
         this.username = username;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setEnabled(boolean active) {
+        this.enabled = active;
     }
 
     public Set<Role> getRoles() {
@@ -84,6 +89,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public User() {

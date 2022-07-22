@@ -3,6 +3,7 @@ package ru.turulin.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
@@ -62,4 +63,17 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("").setViewName("login");
         registry.addViewController("/logout").setViewName("login");
     }
+
+    /**
+     * Указываем Spring web где лежат ресурсы(кртинки, CSS, файлы, прочее).
+     * Нужно для корректного отображения сайта.
+     * Не забудь проверить естьли доступ к этим ресупсам у разных юзеров в {@link WebSecurityConfig2}.
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("img/**").addResourceLocations("/views/img/");
+        registry.addResourceHandler("css/**").addResourceLocations("/views/css/");
+    }
+
+
 }

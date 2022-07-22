@@ -10,7 +10,8 @@
   <packaging>war</packaging>
 
   <!-- Чтобы не писать каждый раз версию очередной spring зависимости,
-  мы объявляем одну из зависимостей <parent> другие будут юзать ее версию. -->
+  мы объявляем одну из зависимостей <parent> другие будут юзать ее версию.
+   От spring-boot-starter-parent начинает конфигурироваться все Spring-Boot приложения.-->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -142,5 +143,15 @@
         </plugin>
       </plugins>
     </pluginManagement>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>8</source>
+                  <target>8</target>
+              </configuration>
+          </plugin>
+      </plugins>
   </build>
 </project>
