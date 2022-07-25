@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -83,7 +84,12 @@ public class WebSecurityConfig2 {
 
     /**
      * Создаем сервис авторизазии юзеров.
-     * Плюс юзера "Admin" с ролью администратора по умолчанию, если его нет в БД.
+     * Плюс юзера "Admin", который не авторизирован, то есть в БД у него нет роли.
+     * Роль необходимо задать через БД вручную.
+     * Мы работаем с уже реализованным {@org.springframework.security.provisioning.JdbcUserDetailsManager}.
+     * Из-за реализованного порядка SQL параметров невозможно создать незахардкоденный sql запрос.
+     * Данную проблему можно решить создав кастомный UsedDetailsManager или внедрив репозиторий в конфигу.
+     * Однако один дефолтный юзер не стоит таких затрат. Лучше вручную через БД или докер.
      * @return
      */
     @Bean
@@ -97,20 +103,18 @@ public class WebSecurityConfig2 {
 
         usersManager.setCreateUserSql("INSERT INTO accounts (id, username, password, enabled) " +
                 "VALUES (nextval('account_id_seq'), ?, ?, ?);");
-        usersManager.setCreateAuthoritySql("insert into account_roles (account_id, roles)" +
-                "SELECT id, ? FROM accounts WHERE username = ?");
+
         usersManager.setUserExistsSql("select username from accounts where username = ?");
 
-        //Не работает как надо!!!
         //Если дефолтнгого юзера в БД нет, то создаем.
-        if (!usersManager.userExists("Admin")) {
+        //ВНИМАНИЕ!! Для корректной работы нужно вручную выдать роль для юзера в БД.
+        if (!usersManager.userExists("DefaultAdmin")) {
             UserDetails user = User.builder()
-                    .username("Admin")
-                    .password(passwordEncoder.encode("admin"))
+                    .username("DefaultAdmin")
+                    .password(passwordEncoder.encode("defaultadmin"))
                     .roles("ADMIN")
                     .build();
             usersManager.createUser(user);
-
         }
 
 
@@ -135,6 +139,7 @@ public class WebSecurityConfig2 {
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(UserDetailsService());
+        //authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         authProvider.setPasswordEncoder(passwordEncoder); //Все ради этой строчки
         return authProvider;
     }
