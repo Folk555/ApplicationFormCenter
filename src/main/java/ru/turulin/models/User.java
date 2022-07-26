@@ -3,8 +3,8 @@ package ru.turulin.models;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
-@Table(name = "usrs")
+//@Entity
+//@Table(name = "usrs")
 public class User {
 
     @Id

@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Авторизация</title>
     <link rel="icon" href="img/logo.jpg">
+
 </head>
 <body>
 Регистрация
@@ -14,6 +15,7 @@
     <div><label> User Name : <input type="text" name="username"/> </label></div>
     <div><label> Password: <input type="password" name="password"/> </label></div>
     <div><input type="submit" value="Зарегистрироваться"/></div>
+
 </form>
 <div th:if="${message}">
     <p th:text="${message}"></p>

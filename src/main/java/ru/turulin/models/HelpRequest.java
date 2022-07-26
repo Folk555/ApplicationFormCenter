@@ -1,9 +1,13 @@
 package ru.turulin.models;
 
+import lombok.Data;
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "help_requests")
+@Data
 public class HelpRequest {
     @Id
     @Column(name = "id", nullable = false)
@@ -20,34 +24,9 @@ public class HelpRequest {
     private String requestOwner;
     @Column(name = "room_number")
     private String roomNumber;
-
-    public long getId() {
-        return id;
-    }
-
-    public String getMessageText() {
-        return messageText;
-    }
-
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
-    }
-
-    public String getRequestOwner() {
-        return requestOwner;
-    }
-
-    public void setRequestOwner(String requestOwner) {
-        this.requestOwner = requestOwner;
-    }
-
-    public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id")
+    private Account author;
 
     public HelpRequest() {
     }
@@ -56,5 +35,16 @@ public class HelpRequest {
         this.messageText = messageText;
         this.requestOwner = requestOwner;
         this.roomNumber = roomNumber;
+    }
+
+    public HelpRequest(String messageText, String requestOwner, String roomNumber, Account account) {
+        this.messageText = messageText;
+        this.requestOwner = requestOwner;
+        this.roomNumber = roomNumber;
+        this.author = account;
+    }
+
+    public String getUsernameAuthor() {
+        return author != null ? author.getUsername() : "<none>";
     }
 }

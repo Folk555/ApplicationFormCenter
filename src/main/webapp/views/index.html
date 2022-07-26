@@ -15,6 +15,10 @@
 
 <div align="center">
     <form method="post">
+        <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}" />
         <p>
             <tr>
                 <input type="text" name="messageText" placeholder="Текст запроса">
@@ -22,7 +26,7 @@
                 <input type="text" name="roomNumber" placeholder="Номер комнаты">
             </tr>
         </p>
-        <button type="submit">Отправить</button>
+        <input type="submit" value="Отправить" />
     </form>
 </div>
 
@@ -36,18 +40,21 @@
             <th>Текст запроса</th>
             <th>Заявитель</th>
             <th>Номер комнаты</th>
+            <th>Создатель заяки</th>
         </tr>
         <tr th:each="request : ${helpRequests}">
             <td th:text="${request.getId()}"></td>
             <td th:text="${request.getMessageText()}"></td>
             <td th:text="${request.getRequestOwner()}"></td>
             <td th:text="${request.getRoomNumber()}"></td>
+            <td th:text="${request.getUsernameAuthor()}"></td>
         </tr>
     </table>
 </div>
 <div>
     <p th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</p>
     <form th:action="@{/logout}" method="post">
+
         <input type="submit" value="Sign Out"/>
     </form>
 </div>

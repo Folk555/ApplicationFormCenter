@@ -17,6 +17,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.ui.Model;
 import ru.turulin.models.Account;
 
@@ -59,13 +60,16 @@ public class WebSecurityConfig2 {
                             .permitAll()
                         .and()
                             .logout()
-                            .permitAll();
+                            .permitAll()
+                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+
         return http.build();
     }
 
     //не будет работать если есть JDBCUserDetailsManager или LAPDUserDetailsManager и наоборот.
     //Отлично подходит для тестирования доступа.
     //@Bean
+    /*
     public InMemoryUserDetailsManager userDetailsService() {
 
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -82,6 +86,8 @@ public class WebSecurityConfig2 {
         return new InMemoryUserDetailsManager(user);
     }
 
+     */
+
     /**
      * Создаем сервис авторизазии юзеров.
      * Плюс юзера "Admin", который не авторизирован, то есть в БД у него нет роли.
@@ -93,21 +99,19 @@ public class WebSecurityConfig2 {
      * @return
      */
     @Bean
-    public UserDetailsService UserDetailsService() {
+    public UserDetailsService userDetailsService() {
 
         JdbcUserDetailsManager usersManager = new JdbcUserDetailsManager(dataSource);
         usersManager.setUsersByUsernameQuery("select username, password, enabled from accounts where username=?");
         usersManager.setAuthoritiesByUsernameQuery("select acc.username, ar.roles from accounts acc " +
                 "inner join account_roles ar on acc.id = ar.account_id where acc.username=?");
-
-
         usersManager.setCreateUserSql("INSERT INTO accounts (id, username, password, enabled) " +
                 "VALUES (nextval('account_id_seq'), ?, ?, ?);");
-
         usersManager.setUserExistsSql("select username from accounts where username = ?");
 
         //Если дефолтнгого юзера в БД нет, то создаем.
         //ВНИМАНИЕ!! Для корректной работы нужно вручную выдать роль для юзера в БД.
+        /*
         if (!usersManager.userExists("DefaultAdmin")) {
             UserDetails user = User.builder()
                     .username("DefaultAdmin")
@@ -117,6 +121,7 @@ public class WebSecurityConfig2 {
             usersManager.createUser(user);
         }
 
+         */
 
         return usersManager;
     }
@@ -138,7 +143,7 @@ public class WebSecurityConfig2 {
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(UserDetailsService());
+        authProvider.setUserDetailsService(userDetailsService());
         //authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         authProvider.setPasswordEncoder(passwordEncoder); //Все ради этой строчки
         return authProvider;
