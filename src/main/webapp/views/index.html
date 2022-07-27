@@ -30,8 +30,7 @@
     </form>
 </div>
 
-
-<table>Перечень заявок</table>
+<h2>Перечень заявок</h2>
 
 <div>
     <table>
@@ -54,11 +53,10 @@
 <div>
     <p th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</p>
     <form th:action="@{/logout}" method="post">
-
         <input type="submit" value="Sign Out"/>
     </form>
 </div>
 </body>
-<footer>CSS не подключено</footer>
+<footer><a href="/accounts">Пользователи</a></footer>
 </html>
 

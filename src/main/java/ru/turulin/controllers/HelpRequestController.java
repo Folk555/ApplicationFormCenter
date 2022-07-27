@@ -12,6 +12,8 @@ import ru.turulin.models.HelpRequest;
 import ru.turulin.repos.AccountRepo;
 import ru.turulin.repos.HelpRequestRepository;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping(path = "/helpRequest") //Все url в мапингах будут начинаться с url в @RequestMapping.
 public class HelpRequestController {
@@ -19,7 +21,6 @@ public class HelpRequestController {
     private HelpRequestRepository helpRequestRepository;
     @Autowired
     private AccountRepo accountRepo;
-
 
     @PostMapping
     public String addHelpRequest(
