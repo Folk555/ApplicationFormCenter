@@ -25,6 +25,7 @@ public class Account {
             allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_gen")
     private long id;
+    @Column(unique=true)
     private String username;
     private String password;
     private boolean enabled;

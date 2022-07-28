@@ -27,6 +27,8 @@ public class HelpRequest {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     private Account author;
+    @Column(name = "file_path")
+    private String filePath;
 
     public HelpRequest() {
     }
@@ -42,6 +44,14 @@ public class HelpRequest {
         this.requestOwner = requestOwner;
         this.roomNumber = roomNumber;
         this.author = account;
+    }
+
+    public HelpRequest(String messageText, String requestOwner, String roomNumber, Account account, String pathFile) {
+        this.messageText = messageText;
+        this.requestOwner = requestOwner;
+        this.roomNumber = roomNumber;
+        this.author = account;
+        this.filePath = pathFile;
     }
 
     public String getUsernameAuthor() {

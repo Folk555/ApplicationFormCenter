@@ -1,0 +1,25 @@
+h1 {
+    color : red;
+}
+
+.creator {
+    vertical-align: top;
+    horiz-align: right;
+}
+
+.requests {
+    display: inline-block;
+    vertical-align: top;
+    horiz-align: left;
+    border: 1px solid #ccc;
+}
+
+.menu {
+    display: inline-block;
+    min-width: 150px;
+    max-width:250px;
+    min-height: 60px;
+    vertical-align: top;
+    horiz-align: right;
+    border: 1px solid #ccc;
+}

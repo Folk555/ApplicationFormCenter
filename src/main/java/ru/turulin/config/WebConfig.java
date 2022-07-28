@@ -1,6 +1,7 @@
 package ru.turulin.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -17,6 +18,8 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 @ComponentScan("ru.turulin.*")
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+    @Value("${upload.path}")
+    private String uploadPath;
 
     private final ApplicationContext applicationContext;
 
@@ -73,6 +76,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("img/**").addResourceLocations("/views/img/");
         registry.addResourceHandler("css/**").addResourceLocations("/views/css/");
+        registry.addResourceHandler("uploads/**").addResourceLocations("file://"+uploadPath+"/");
     }
 
 

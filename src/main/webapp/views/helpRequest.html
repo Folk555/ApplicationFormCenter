@@ -6,33 +6,29 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Главная</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/helpRequest.css">
     <link rel="icon" href="img/logo.jpg"/>
 
 </head>
 <body>
-<h1>Заголовок 1ого уровня</h1>
-
-<div align="center">
-    <form method="post">
-        <input
-                type="hidden"
-                th:name="${_csrf.parameterName}"
-                th:value="${_csrf.token}" />
+<div class="creator" align="center">
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}"/>
         <p>
-            <tr>
-                <input type="text" name="messageText" placeholder="Текст запроса">
-                <input type="text" name="requestOwner" placeholder="Заявитель">
-                <input type="text" name="roomNumber" placeholder="Номер комнаты">
-            </tr>
+            <input type="text" name="messageText" placeholder="Текст запроса">
+            <input type="text" name="requestOwner" placeholder="Заявитель">
+            <input type="text" name="roomNumber" placeholder="Номер комнаты">
+            <input type="file" name="file"/>
         </p>
-        <input type="submit" value="Отправить" />
+        <input type="submit" value="Отправить"/>
     </form>
 </div>
 
-<h2>Перечень заявок</h2>
 
-<div>
+<h2>Перечень заявок</h2>
+<div class="requests">
     <table>
         <tr>
             <th>Id</th>
@@ -40,6 +36,7 @@
             <th>Заявитель</th>
             <th>Номер комнаты</th>
             <th>Создатель заяки</th>
+            <th>Файлы</th>
         </tr>
         <tr th:each="request : ${helpRequests}">
             <td th:text="${request.getId()}"></td>
@@ -47,16 +44,19 @@
             <td th:text="${request.getRequestOwner()}"></td>
             <td th:text="${request.getRoomNumber()}"></td>
             <td th:text="${request.getUsernameAuthor()}"></td>
+            <td th:if="${not #lists.isEmpty(request.getFilePath())}">
+                <img th:src="@{/uploads/{file}(file=${request.getFilePath()})}" height="100" width="100">
+            </td>
         </tr>
     </table>
 </div>
-<div>
+<div class="menu">
     <p th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</p>
     <form th:action="@{/logout}" method="post">
         <input type="submit" value="Sign Out"/>
     </form>
+    <a href="/accounts">Пользователи</a>
 </div>
 </body>
-<footer><a href="/accounts">Пользователи</a></footer>
 </html>
 
