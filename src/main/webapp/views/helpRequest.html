@@ -1,12 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>Главная</title>
-    <link rel="stylesheet" href="css/helpRequest.css">
+    <link rel="stylesheet" href="css/helpRequest.css"/>
     <link rel="icon" href="img/logo.jpg"/>
 
 </head>
@@ -17,9 +17,9 @@
                th:name="${_csrf.parameterName}"
                th:value="${_csrf.token}"/>
         <p>
-            <input type="text" name="messageText" placeholder="Текст запроса">
-            <input type="text" name="requestOwner" placeholder="Заявитель">
-            <input type="text" name="roomNumber" placeholder="Номер комнаты">
+            <input type="text" name="messageText" placeholder="Текст запроса"/>
+            <input type="text" name="requestOwner" placeholder="Заявитель"/>
+            <input type="text" name="roomNumber" placeholder="Номер комнаты"/>
             <input type="file" name="file"/>
         </p>
         <input type="submit" value="Отправить"/>
@@ -29,7 +29,7 @@
 
 <h2>Перечень заявок</h2>
 <div class="requests">
-    <table>
+    <table id="helpRequests-list">
         <tr>
             <th>Id</th>
             <th>Текст запроса</th>
@@ -38,14 +38,14 @@
             <th>Создатель заяки</th>
             <th>Файлы</th>
         </tr>
-        <tr th:each="request : ${helpRequests}">
-            <td th:text="${request.getId()}"></td>
-            <td th:text="${request.getMessageText()}"></td>
-            <td th:text="${request.getRequestOwner()}"></td>
-            <td th:text="${request.getRoomNumber()}"></td>
-            <td th:text="${request.getUsernameAuthor()}"></td>
-            <td th:if="${not #lists.isEmpty(request.getFilePath())}">
-                <img th:src="@{/uploads/{file}(file=${request.getFilePath()})}" height="100" width="100">
+        <tr th:each="request : ${helpRequests}" th:id="${request.getId()}">
+            <td th:text="${request.getId()}" id="requestId"></td>
+            <td th:text="${request.getMessageText()}" id="requestText"></td>
+            <td th:text="${request.getRequestOwner()}" id="requestOwner"></td>
+            <td th:text="${request.getRoomNumber()}" id="requestRoomNumber"></td>
+            <td th:text="${request.getUsernameAuthor()}" id="requestIdUsernameAuthor"></td>
+            <td th:if="${not #lists.isEmpty(request.getFilePath())}" id="requestFile">
+                <img th:src="@{/uploads/{file}(file=${request.getFilePath()})}" height="100" width="100"/>
             </td>
         </tr>
     </table>
