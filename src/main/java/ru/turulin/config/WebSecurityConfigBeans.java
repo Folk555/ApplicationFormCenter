@@ -31,12 +31,16 @@ import javax.sql.DataSource;
 //Включает АОП для безопасности.
 //Теперь "какой-то" security АОП метод будет отрабатывать перед POST запросом.
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig2 {
+public class WebSecurityConfigBeans {
+
+    private DataSource dataSource;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private DataSource dataSource;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    public WebSecurityConfigBeans(DataSource dataSource, PasswordEncoder passwordEncoder) {
+        this.dataSource = dataSource;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * Фильтр URL который будет запрещать или наоборот разрешать доступ к ресурсам.

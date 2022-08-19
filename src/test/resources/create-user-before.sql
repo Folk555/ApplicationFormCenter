@@ -8,3 +8,5 @@ insert into accounts(id, enabled, password, username) values
 insert into account_roles(account_id, roles) values
 (1,'USER'), (1, 'ADMIN'),
 (2,'USER');
+
+alter sequence account_id_seq restart 10;

@@ -4,9 +4,9 @@
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Авторизация</title>
-    <link rel="icon" href="img/logo.jpg">
+    <link rel="icon" href="img/logo.jpg"/>
 
 </head>
 <body>
@@ -17,7 +17,7 @@
     <div><input type="submit" value="Зарегистрироваться"/></div>
 
 </form>
-<div th:if="${message}">
+<div th:if="${message}" id="user-exist-error">
     <p th:text="${message}"></p>
     <p>Юзер есть</p>
 </div>

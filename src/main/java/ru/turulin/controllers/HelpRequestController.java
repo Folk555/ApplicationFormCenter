@@ -34,8 +34,7 @@ public class HelpRequestController {
             @RequestParam String messageText,
             @RequestParam String requestOwner,
             @RequestParam String roomNumber,
-            @RequestParam MultipartFile file,
-            Model model) throws IOException {
+            @RequestParam MultipartFile file) throws IOException {
         Account account = accountRepo.findByUsername(user.getUsername());
         if (file.isEmpty()) {
             HelpRequest hr = new HelpRequest(messageText, requestOwner, roomNumber, account);
@@ -44,6 +43,7 @@ public class HelpRequestController {
         }
 
         //От этого надо избавиться
+        //Нужно создать директории при развортывании ПО.
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists())
             uploadDir.mkdir();

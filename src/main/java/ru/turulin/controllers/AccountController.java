@@ -35,7 +35,7 @@ public class AccountController {
     }
 
     @GetMapping("{accountId}")
-    public String getAccounts(
+    public String getAccount(
             @PathVariable long accountId,
             Model model) {
 
