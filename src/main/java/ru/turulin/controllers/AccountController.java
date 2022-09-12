@@ -38,32 +38,26 @@ public class AccountController {
     public String getAccount(
             @PathVariable long accountId,
             Model model) {
-
         Optional<Account> optionalAccount = accountRepo.findById(accountId);
         if (!optionalAccount.isPresent()) return "accounts";
-
         model.addAttribute("editingAccount", optionalAccount.get());
         return "accountEdit";
     }
 
     /**
-     *
      * @param account
-     * @param form - нужен для поиска ролей, так как иного способа заинжектить выбранные юзером нет.
+     * @param form - нужен для поиска ролей, так как иного способа заинжектить выбранные юзером роли - нет.
      * @return
      */
     @PostMapping
     public String updateAccount(Account account, @RequestParam Map<String, String> form){
-
         Optional<Account> optionalAccount = accountRepo.findById(account.getId());
         if (!optionalAccount.isPresent()) return "redirect:/accounts";
-
         Account accountFromDB = optionalAccount.get();
         if (!accountFromDB.getPassword().equals(account.getPassword()))
             account.setPassword(passwordEncoder.encode(account.getPassword()));
         if (!accountFromDB.getUsername().equals(account.getUsername()))
             account.setUsername(account.getUsername());
-
         Set<String> possibleRoleNames = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
         Set<Role> newRoles = new TreeSet<>();
         for (String key : form.keySet()){
@@ -71,9 +65,7 @@ public class AccountController {
                 newRoles.add(Role.valueOf(key));
         }
         account.setRoles(newRoles);
-
-        accountRepo.save(account); //Если запись существует то она обновится
-
+        accountRepo.save(account); //Существующая запись обновится
 
         return "redirect:/accounts";
     }

@@ -35,5 +35,7 @@ public class Account {
             joinColumns=@JoinColumn(name="account_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
+    //mappedBy - имя атрибут класса, который является владельцем связи
+    //@OneToOne(mappedBy = "account", cascade=CascadeType.ALL)
+    //private Personality personality;
 }

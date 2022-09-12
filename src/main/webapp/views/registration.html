@@ -12,10 +12,10 @@
 <body>
 Регистрация
 <form th:action="@{/registration}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
+    <div><label> Логин : <input type="text" name="username"/> </label></div>
+    <div><label> Пароль: <input type="password" name="password"/> </label></div>
+    <div><label> Электронная почта: <input type="text" name="email"/> </label></div>
     <div><input type="submit" value="Зарегистрироваться"/></div>
-
 </form>
 <div th:if="${message}" id="user-exist-error">
     <p th:text="${message}"></p>

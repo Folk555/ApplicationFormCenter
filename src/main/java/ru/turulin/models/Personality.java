@@ -16,11 +16,16 @@ public class Personality {
     sequenceName = "personalities_id_seq",
     allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personalities_gen")
-    int id;
+    long id;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "patronymic")
     private String patronymic;
     @Column(name = "last_name")
     private String lastName;
+    private String email;
+    private String activateCode;
+    @OneToOne
+    @JoinColumn(name = "fk_prs_acc", referencedColumnName = "id")
+    private Account account;
 }

@@ -52,7 +52,7 @@ public class WebSecurityConfigBeans {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-                            .antMatchers("/", "/registration", "/img/**").permitAll()//Запросы по этому url
+                            .antMatchers("/", "/registration/**", "/img/**").permitAll()//Запросы по этому url
                             .anyRequest().authenticated() //каждый считается "Авторезированным"
                         .and()
                             .formLogin()//Включаем форму авторизации
@@ -88,7 +88,6 @@ public class WebSecurityConfigBeans {
 
         return new InMemoryUserDetailsManager(user);
     }
-
      */
 
     /**
@@ -123,7 +122,6 @@ public class WebSecurityConfigBeans {
                     .build();
             usersManager.createUser(user);
         }
-
          */
 
         return usersManager;
@@ -148,7 +146,7 @@ public class WebSecurityConfigBeans {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         //authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
-        authProvider.setPasswordEncoder(passwordEncoder); //Все ради этой строчки
+        authProvider.setPasswordEncoder(passwordEncoder); //Весь метод ради этой строчки
         return authProvider;
     }
 

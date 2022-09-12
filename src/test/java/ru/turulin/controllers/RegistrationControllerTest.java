@@ -39,14 +39,12 @@ class RegistrationControllerTest {
                         .param("password", "testPass")
                 .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/login"));
-
         mockMvc.perform(MockMvcRequestBuilders.post("/login")
                 .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .param("username", "newUser")
                 .param("password", "testPass"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/helpRequest"))
                 .andExpect(SecurityMockMvcResultMatchers.authenticated());
-
         mockMvc.perform(MockMvcRequestBuilders.get("/accounts")
                         .with(SecurityMockMvcRequestPostProcessors.user("newUser").password("testPass")))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());

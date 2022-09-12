@@ -17,7 +17,7 @@ public class HelpRequest {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "help_requests_gen")
     //GenerationType.SEQUENCE не работает с полем INTEGER!!!!
-    private int id;
+    private long id;
     @Column(name = "message_text")
     private String messageText;
     @Column(name = "request_owner")
