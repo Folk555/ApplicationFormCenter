@@ -54,10 +54,10 @@ public class RegistrationController {
         accountRepo.save(account);
         personality.setActivateCode(UUID.randomUUID().toString());
         personality.setAccount(account);
-        personality = personalityRepo.save(personality); //Так мы получаем personality вместе с ID которое было присвоено в БД
+        personalityRepo.save(personality);
         String message = "Здравствуйте " + account.getUsername() +
                 ", для подтверждения почты перейдите по ссылке: " + accountConfirmUrl + "/" + personality.getActivateCode();
-        mailSender.sendMail("sanya.turulin.98@list.ru", "Подтверждение почты", message);
+        mailSender.sendMail(personality.getEmail(), "Подтверждение почты", message);
 
         return "redirect:/login";
     }
