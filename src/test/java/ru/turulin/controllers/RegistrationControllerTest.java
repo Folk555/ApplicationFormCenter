@@ -1,5 +1,6 @@
 package ru.turulin.controllers;
 
+import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,9 +28,9 @@ class RegistrationControllerTest {
     MockMvc mockMvc;
 
     @Test
-    void registration() throws Exception {
+    void registrationURL_shouldShowRegisterForm() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/registration"))
-                .andExpect(MockMvcResultMatchers.xpath("/html/body/form/div[3]/input").exists());
+                .andExpect(MockMvcResultMatchers.xpath("/html/body/form").exists());
     }
 
     @Test
@@ -57,6 +58,7 @@ class RegistrationControllerTest {
                         .param("username", "testUser2")
                         .param("password", "testPass")
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(MockMvcResultMatchers.xpath("//div[@id='user-exist-error']").exists());
+                .andExpect(MockMvcResultMatchers.xpath("//div[@id='notification']")
+                        .string(StringContains.containsStringIgnoringCase("Пользователь с таким логином уже существует")));
     }
 }
