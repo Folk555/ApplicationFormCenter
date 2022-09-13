@@ -6,9 +6,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.turulin.exeptions.NotFoundElementInDataSourceException;
 import ru.turulin.models.Account;
 import ru.turulin.models.Role;
 import ru.turulin.repos.AccountRepo;
+import ru.turulin.services.AFCUserService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,14 +25,11 @@ import java.util.stream.Collectors;
 public class AccountController {
 
     @Autowired
-    AccountRepo accountRepo;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    AFCUserService afcUserService;
 
     @GetMapping
     public String getAccounts(Model model) {
-        Iterable<Account> accountIterable = accountRepo.findAll();
-        model.addAttribute("accounts", accountIterable);
+        model.addAttribute("accounts", afcUserService.getAllAccounts());
         return "accounts";
     }
 
@@ -38,35 +37,33 @@ public class AccountController {
     public String getAccount(
             @PathVariable long accountId,
             Model model) {
-        Optional<Account> optionalAccount = accountRepo.findById(accountId);
-        if (!optionalAccount.isPresent()) return "accounts";
-        model.addAttribute("editingAccount", optionalAccount.get());
+        try {
+            model.addAttribute("editingAccount", afcUserService.getAccountById(accountId));
+        } catch (NotFoundElementInDataSourceException e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Не удалось найти пользователя по ID." +
+                    "Свяжитесь с тех. поддержкой.");
+            return "notificationPage";
+        }
         return "accountEdit";
     }
 
     /**
      * @param account
-     * @param form - нужен для поиска ролей, так как иного способа заинжектить выбранные юзером роли - нет.
+     * @param form    - нужен для поиска ролей,
+     *                так как иного способа заинжектить выбранные юзером роли - нет.
      * @return
      */
     @PostMapping
-    public String updateAccount(Account account, @RequestParam Map<String, String> form){
-        Optional<Account> optionalAccount = accountRepo.findById(account.getId());
-        if (!optionalAccount.isPresent()) return "redirect:/accounts";
-        Account accountFromDB = optionalAccount.get();
-        if (!accountFromDB.getPassword().equals(account.getPassword()))
-            account.setPassword(passwordEncoder.encode(account.getPassword()));
-        if (!accountFromDB.getUsername().equals(account.getUsername()))
-            account.setUsername(account.getUsername());
-        Set<String> possibleRoleNames = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
-        Set<Role> newRoles = new TreeSet<>();
-        for (String key : form.keySet()){
-            if (possibleRoleNames.contains(key))
-                newRoles.add(Role.valueOf(key));
+    public String updateAccount(Account account, @RequestParam Map<String, String> form, Model model) {
+        try {
+            afcUserService.updateAccount(account, form.keySet());
+        } catch (NotFoundElementInDataSourceException e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Не удалось найти пользователя по ID." +
+                    "Свяжитесь с тех. поддержкой.");
+            return "notificationPage";
         }
-        account.setRoles(newRoles);
-        accountRepo.save(account); //Существующая запись обновится
-
         return "redirect:/accounts";
     }
 
